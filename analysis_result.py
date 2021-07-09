@@ -6,7 +6,7 @@ from datetime import timedelta, datetime
 plt.style.use('ggplot')  # Красивые графики
 plt.rcParams['figure.figsize'] = (15, 5)  # Размер картинок
 """читаем блокчейн"""
-dg = pd.read_csv('C:/Users/Света/Downloads/btc-tx (1)/btc-tx.csv', sep = ',', encoding='latin1',parse_dates=['time'], dayfirst=True, error_bad_lines=False)
+dg = pd.read_csv('https://github.com/Yakimov-n/transaction-analysis.git/btc-tx.csv', sep = ',', encoding='latin1',parse_dates=['time'], dayfirst=True, error_bad_lines=False)
 """находим и оставляем строки, которые содержат числа, а так же меняем значение, если строка съехала"""
 def safe_float_convert(x):
     try:
@@ -34,7 +34,7 @@ dg = dg.drop_duplicates(subset='Hash').set_index('Hash')
 dg['Transaction_amount_BTC'] = dg_h['Transaction_amount_BTC']
 dg = dg.reset_index()
 dg = dg[dg['Transaction_amount_BTC'].notna()].sort_values('time', kind='mergesort').set_index('time')
-db = pd.read_csv('C:/Users/Света/Downloads/Прошлые данные - BTC_USD Bitfinex.csv', sep = ',', parse_dates=['Дата'], dayfirst=True) # читаем статистику по стоимости биткоина
+db = pd.read_csv('https://github.com/Yakimov-n/transaction-analysis.git/Прошлые данные - BTC_USD Bitfinex.csv', sep = ',', parse_dates=['Дата'], dayfirst=True) # читаем статистику по стоимости биткоина
 db = db.sort_values("Дата", kind = 'mergesort')
 db['Цена'] = db['Цена'].str.replace('[.]','').str.replace('[,]','.').astype(float)
 """выбираем интервал на основе данных блокчейна"""
@@ -47,7 +47,7 @@ dg = dg.join(db['Цена']).drop(['Hash'], axis=1) # добавляем сто�
 dg = pd.concat([dg,(dg['Transaction_amount_BTC'].multiply(dg['Цена'], axis=0))],axis=1) # получем суммы транзакций в $
 dg = dg.set_axis(['Transaction_amount_BTC','Цена','total'],axis=1)
 """читаем статистику банковских транзакций"""
-df1 = pd.read_csv('C:/Users/Света/Downloads/download_data_fincen_files/download_transactions_map.csv', sep = ',', parse_dates=['begin_date', 'end_date'],dayfirst=True)
+df1 = pd.read_csv('https://github.com/Yakimov-n/transaction-analysis.git/download_transactions_map.csv', sep = ',', parse_dates=['begin_date', 'end_date'],dayfirst=True)
 df1 = df1.sort_values("end_date", kind = 'mergesort')
 dg = dg.reset_index()
 df_mask = dg['total'].values
